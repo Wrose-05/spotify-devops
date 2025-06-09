@@ -1,0 +1,23 @@
+FROM node:18
+
+WORKDIR /app
+
+# Copiar arquivos de dependência primeiro para cache de build
+COPY Back-end/Api/package*.json ./Back-end/Api/
+
+# Instalar dependências
+WORKDIR /app/Back-end/Api
+RUN npm install
+
+# Copiar o restante do projeto
+WORKDIR /app
+COPY . .
+
+# Garantir que o servidor escute em todas as interfaces
+ENV HOST=0.0.0.0
+
+# Expor a porta
+EXPOSE 3000
+
+# Rodar o servidor
+CMD ["node", "Back-end/Api/server.js"]
